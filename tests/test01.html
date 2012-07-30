@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Canvas Test</title>
+  	<script src="../src/arclib.js"></script>
+	</head>
+	<body>
+		<section>
+			<div>
+				<canvas id="canvas" width="400" height="400">
+					This text is displayed if your browser does not support HTML5 Canvas.
+				</canvas>
+			</div>
+
+			<script type="text/javascript">
+var myColor = ["#ECD078","#D95B43","#C02942","#542437","#53777A"];
+var myData = [40,30,30,30,30];
+
+function printCoord(x, y) {
+	document.write("(" + x + ", " + y + ")<br/>");
+}
+
+function getTotal(values){
+	var myTotal = 0;
+	for (var j = 0; j < values.length; j++) {
+		myTotal += (typeof values[j] == 'number') ? values[j] : 0;
+	}
+	return myTotal;
+}
+
+function pieGraph(ctx, cX, cY, outerR, innerR, values, colors, lineColor, lineWidth) {
+	var a = new arc(cX, cY, outerR, innerR, 0, 0, "#000000", lineColor, lineWidth);
+	var startAngle = 0;
+	var endAngle = 0;
+	var myTotal = getTotal(values);
+	for (var i = 0; i < values.length; i++) {
+		a.endAngle = a.startAngle + Math.PI * 2 * values[i] / myTotal;
+		a.color = colors[i];
+		a.draw(ctx);
+		a.startAngle = a.endAngle;
+	}
+}
+
+function plotDonut(ctx) {
+	var x = 200;
+	var y = 200;
+	var R1 = 145;
+	var R2 = 85;
+	var lineColor = "#000000";
+	var spacing = 2;
+	var values = [9, 2.8, 12.2];
+	var colors = ["#3333DD","#777777","#DDDDDD"];
+	pieGraph(ctx, x, y, R1, R2, values, colors, lineColor, spacing);
+	var a = new arc(x, y, (R1 + R2) / 2, R2, 0, 2.4 / 24 * Math.PI * 2, "#333377", lineColor, spacing);
+	a.draw(ctx);
+}
+
+function plotData() {
+	var canvas;
+	var ctx;
+
+	canvas = document.getElementById("canvas");
+	ctx = canvas.getContext("2d");
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	
+	plotDonut(ctx);
+}
+
+plotData();
+			</script>
+		</section>
+	</body>
+</html>
